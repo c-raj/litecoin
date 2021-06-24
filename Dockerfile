@@ -12,10 +12,14 @@ RUN curl -so litecoin-core.tar.gz https://download.litecoin.org/litecoin-${LITEC
   && grep $(sha256sum litecoin-core.tar.gz | awk '{ print $1 }') litecoin-signatures.asc \
   && tar -xzf litecoin-core.tar.gz -C /usr/local/bin
 
+RUN useradd -ms /bin/bash -U kraken
+
+RUN chown -R kraken:kraken /usr/local/bin
+USER kraken
 ENV PATH="/usr/local/bin/litecoin-${LITECOIN_VERSION}/bin:${PATH}"
 
 VOLUME ["/opt/litecoin"]
 
-EXPOSE 9332 9333 19332 19333 19444
+EXPOSE 9333
 
 CMD ["litecoind"]
